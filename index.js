@@ -1,24 +1,14 @@
 
-const express = require ('express') ; 
-const passport = require('passport');
-const mongoose  =  require('mongoose') ; 4
-const cookieSession = require ('cookie-session');
-const keys = require('./config/keys')
-const app = express();
-app.use (cookieSession({
-    maxAge : 24*3600*1000,
-    keys : [keys.cookie]
-}))
+import React from 'react';
+import reactDOM from 'react-dom' ;
+import App from './component/App' ;
+import { Provider } from 'react-redux'
+import { createStore , applyMiddleware  } from 'redux'
+import reducers from './reducers'
+import  'materialize-css/dist/css/materialize.min.css'
 
+import reduxThunk from 'redux-thunk'
+const store = createStore(reducers, {} , applyMiddleware(reduxThunk));
 
-app.use (passport.initialize());
-app.use (passport.session());
+reactDOM.render (<Provider store={store}><App/></Provider> , document.querySelector('#root'))
 
-
-mongoose.connect(keys.mongoURI);
-require('./models/User');
-require('./services/passport');
-require('./routes/routes')(app)
-
-
-app.listen(2021)
